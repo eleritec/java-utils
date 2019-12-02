@@ -1,6 +1,7 @@
 package net.eleritec.utils;
 
 import static java.util.Arrays.asList;
+import static net.eleritec.utils.ListComprehension.expand;
 import static net.eleritec.utils.ListComprehension.list;
 import static net.eleritec.utils.ListComprehension.range;
 import static org.junit.Assert.assertEquals;
@@ -82,6 +83,22 @@ public class ListComprehensionTest {
 	public void testLettersInString() {
 		// list = [ letter for letter in 'human' ]
 		assertList(list("human"), "h", "u", "m", "a", "n");
+	}
+	
+	@Test
+	public void testTuplesNotSameNumber() {
+		List<Integer> listA = asList(1, 2, 3);
+		List<Integer> listB = asList(2, 7);
+		
+		// different_num = [(a, b) for a in list_a for b in list_b if a != b]
+		List<List<Integer>> notSame = expand(a->list(b->asList(a, b), listB, b-> a!=b), listA);
+		
+		assertEquals(5, notSame.size());
+		assertList(notSame.get(0), 1, 2);
+		assertList(notSame.get(1), 1, 7);
+		assertList(notSame.get(2), 2, 7);
+		assertList(notSame.get(3), 3, 2);
+		assertList(notSame.get(4), 3, 7);
 	}
 
 	

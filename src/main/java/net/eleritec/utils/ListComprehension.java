@@ -108,6 +108,17 @@ public class ListComprehension {
 	}
 	
 	@SafeVarargs
+	public static <T, R> List<R> expand(Function<T, List<R>> tx, Collection<T> collection, Predicate<T>...filters) {
+		Stream<T> stream = stream(null, collection, filters);
+		return stream.flatMap(t->tx.apply(t).stream()).collect(Collectors.toList());
+	}
+	
+	@SafeVarargs
+	public static <T, R> List<R> expand(Function<T, List<R>> tx, T[] array, Predicate<T>...filters) {
+		return expand(tx, Arrays.asList(array), filters);
+	}
+	
+	@SafeVarargs
 	public static <T, R> Set<R> set(T[] array, Predicate<T>...filters) {
 		return set(null, Arrays.asList(array), filters);
 	}
