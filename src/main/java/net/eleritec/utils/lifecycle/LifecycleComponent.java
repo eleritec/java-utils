@@ -1,7 +1,6 @@
 package net.eleritec.utils.lifecycle;
 
 import static net.eleritec.utils.collection.CollectionUtil.listOf;
-import static net.eleritec.utils.lifecycle.SingleExec.runOnce;
 
 public interface LifecycleComponent {
 
@@ -17,12 +16,37 @@ public interface LifecycleComponent {
 	
 	@SuppressWarnings("unchecked")
 	default <T extends LifecycleComponent> T start() {
-		LifecycleTracker.getOpenStatus(this).set(runOnce(()->open()));
+		if(!isOpen()) {
+			StatusTracker tracker = LifecycleTracker.getOpenStatus(this);
+			
+			synchronized (tracker) {
+				if(tracker.wasStarted()) {
+					return (T)this;
+				}
+				tracker.setStatus(ExecutionStatus.IN_PROGRESS);
+			}
+			
+			synchronized(tracker) {
+				if(tracker.inProgress()) {
+					try {
+						open();
+						tracker.setStatus(ExecutionStatus.COMPLETE);
+					}
+					catch(RuntimeException e) {
+						tracker.setStatus(ExecutionStatus.NOT_STARTED);
+						throw e;
+					}
+				}
+			}
+		}
 		return (T) this;
 	}
 	
 	default boolean isOpen() {
-		return LifecycleTracker.getOpenStatus(this).get();
+		StatusTracker tracker = LifecycleTracker.getOpenStatus(this);
+		synchronized(tracker) {
+			return tracker.isComplete();
+		}
 	}
 	
 	@SafeVarargs
