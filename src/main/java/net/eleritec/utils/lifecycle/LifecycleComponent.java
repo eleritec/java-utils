@@ -1,6 +1,7 @@
 package net.eleritec.utils.lifecycle;
 
 import static net.eleritec.utils.collection.CollectionUtil.listOf;
+import static net.eleritec.utils.lifecycle.StatusTracker.getStatus;
 
 public interface LifecycleComponent {
 
@@ -17,7 +18,7 @@ public interface LifecycleComponent {
 	@SuppressWarnings("unchecked")
 	default <T extends LifecycleComponent> T start() {
 		if(!isOpen()) {
-			StatusTracker tracker = LifecycleTracker.getOpenStatus(this);
+			StatusTracker tracker = getStatus(this);
 			
 			synchronized (tracker) {
 				if(tracker.wasStarted()) {
@@ -43,7 +44,7 @@ public interface LifecycleComponent {
 	}
 	
 	default boolean isOpen() {
-		StatusTracker tracker = LifecycleTracker.getOpenStatus(this);
+		StatusTracker tracker = getStatus(this);
 		synchronized(tracker) {
 			return tracker.isComplete();
 		}
