@@ -1,10 +1,12 @@
 package net.eleritec.utils.collection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,5 +63,32 @@ public class CollectionUtil {
 	
 	public static <T> Set<T> asSet(Stream<T> stream) {
 		return stream.collect(Collectors.toSet());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> listOf(Collection<?> items, Class<T> type) {
+		return (List<T>) items.stream().filter(obj->ObjectUtil.isType(type, obj)).collect(Collectors.toList());
+	}
+	
+	@SafeVarargs
+	public static <T> T firstAvailable(T...items) {
+		return firstMatch(items, ObjectUtil::notNull);
+	}
+	
+	public static <T> T firstMatch(T[] items, Predicate<T> filter) {
+		return firstMatch(Arrays.asList(items), filter, null);
+	}
+	
+	public static <T> T firstMatch(T[] items, Predicate<T> filter, T defaultValue) {
+		return firstMatch(Arrays.asList(items), filter, defaultValue);
+	}
+	
+	public static <T> T firstMatch(Collection<T> items, Predicate<T> filter) {
+		return firstMatch(items, filter, null);
+	}
+	
+	public static <T> T firstMatch(Collection<T> items, Predicate<T> filter, T defaultValue) {
+		T match = items==null? null: items.stream().filter(filter).findFirst().orElse(null);
+		return match==null? defaultValue: match;
 	}
 }

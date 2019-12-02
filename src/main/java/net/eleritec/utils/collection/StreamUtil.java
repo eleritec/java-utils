@@ -9,6 +9,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.eleritec.utils.object.ObjectUtil;
+
 public class StreamUtil {
 
 	public static <T> List<T> list(Stream<T> stream) {
@@ -29,9 +31,8 @@ public class StreamUtil {
 		return filter(Arrays.asList(items), predicates);
 	}
 	
-	@SafeVarargs
-	public static <T, R> Stream<R> map(Function<T, R> transform, Collection<T> items, Predicate<T>...criteria) {
-		return filter(items, criteria).map(transform);
+	public static <T, R> Stream<R> map(Function<T, R> transform, Collection<T> items) {
+		return items.stream().map(transform);
 	}
 	
 	@SafeVarargs
@@ -58,5 +59,14 @@ public class StreamUtil {
 				return true;
 			}			
 		};
+	}
+	
+	@SafeVarargs
+	public static <T> Stream<T> notNull(T...items) {
+		return notNull(Arrays.asList(items));
+	}
+
+	public static <T> Stream<T> notNull(Collection<T> items) {
+		return filter(items, ObjectUtil::notNull);
 	}
 }

@@ -45,5 +45,27 @@ public class MapUtil {
 	public static <K, V> Map<K, V> mapBy(Stream<V> values, Function<V, K> keyField) {
 		return mapBy(CollectionUtil.asList(values), keyField);
 	}
+	
+	public static <K, V> V get(Map<K, V> map, K key, V defaultValue) {
+		V value = map.get(key);
+		if(value==null) {
+			value = defaultValue;
+			if(value!=null) {
+				map.put(key, value);
+			}
+		}
+		return value;
+	}
+	
+	public static <K, V> V get(Map<K, V> map, K key, Function<K, V> generator) {
+		V value = map.get(key);
+		if(value==null) {
+			value = generator==null? null: generator.apply(key);
+			if(value!=null) {
+				map.put(key, value);
+			}
+		}
+		return value;
+	}
 
 }

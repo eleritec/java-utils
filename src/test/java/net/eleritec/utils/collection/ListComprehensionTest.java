@@ -92,6 +92,7 @@ public class ListComprehensionTest {
 		
 		// different_num = [(a, b) for a in list_a for b in list_b if a != b]
 		List<List<Integer>> notSame = expand(a->list(b->asList(a, b), listB, b-> a!=b), listA);
+		// works just fine - not sure it's terribly readable though
 		
 		assertEquals(5, notSame.size());
 		assertList(notSame.get(0), 1, 2);
