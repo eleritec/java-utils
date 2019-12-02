@@ -1,4 +1,4 @@
-package net.eleritec.utils;
+package net.eleritec.utils.collection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
