@@ -1,5 +1,7 @@
 package net.eleritec.utils.collection;
 
+import static net.eleritec.utils.collection.StreamUtil.combine;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -142,13 +144,13 @@ public class ListComprehension {
 	@SafeVarargs
 	private static <T, R> Stream<R> stream(Function<T, R> tx, Collection<T> collection, Predicate<T>...filters) {
 		Stream<T> stream = collection==null? (Stream<T>) EMPTY.stream(): collection.stream();
-		stream = stream.filter(consolidate(filters));
+		stream = stream.filter(combine(filters));
 		return tx==null? (Stream<R>) stream: stream.map(tx);
 	}
 	
 	@SafeVarargs
 	public static <T> int indexOf(List<T> list, Predicate<T>...filters) {
-		Predicate<T> matcher = consolidate(filters);
+		Predicate<T> matcher = combine(filters);
 		for(int i=0; list!=null && i<list.size(); i++) {
 			if(matcher.test(list.get(i))) {
 				return i;
@@ -160,31 +162,13 @@ public class ListComprehension {
 	@SafeVarargs
 	public static <T> int lastIndexOf(List<T> list, Predicate<T>...filters) {
 		int lastIndex = -1;
-		Predicate<T> matcher = consolidate(filters);
+		Predicate<T> matcher = combine(filters);
 		for(int i=0; list!=null && i<list.size(); i++) {
 			if(matcher.test(list.get(i))) {
 				lastIndex = i;
 			}
 		}
 		return lastIndex;
-	}
-	
-	private static <T> Predicate<T> consolidate(Predicate<T>[] predicates) {
-		return consolidate(Arrays.asList(predicates));
-	}
-	
-	private static <T> Predicate<T> consolidate(List<Predicate<T>> predicates) {
-		return new Predicate<T>() {
-			@Override
-			public boolean test(T t) {
-				for(Predicate<T> p: predicates) {
-					if(!p.test(t)) {
-						return false;
-					}
-				}
-				return true;
-			}			
-		};
 	}
 	
 	private static List<String> characters(String text) {
