@@ -57,7 +57,7 @@ public class MapUtil {
 		return value;
 	}
 	
-	public static <K, V> V get(Map<K, V> map, K key, Function<K, V> generator) {
+	public static <K, V> V resolve(Map<K, V> map, K key, Function<K, V> generator) {
 		V value = map.get(key);
 		if(value==null) {
 			value = generator==null? null: generator.apply(key);

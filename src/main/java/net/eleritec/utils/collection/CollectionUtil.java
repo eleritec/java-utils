@@ -70,6 +70,10 @@ public class CollectionUtil {
 		return (List<T>) items.stream().filter(obj->ObjectUtil.isType(type, obj)).collect(Collectors.toList());
 	}
 	
+	public static <T> List<T> listOf(Object[] items, Class<T> type) {
+		return listOf(Arrays.asList(items), type);
+	}
+	
 	@SafeVarargs
 	public static <T> T firstAvailable(T...items) {
 		return firstMatch(items, ObjectUtil::notNull);
