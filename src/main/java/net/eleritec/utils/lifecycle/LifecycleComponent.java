@@ -3,33 +3,26 @@ package net.eleritec.utils.lifecycle;
 import static net.eleritec.utils.collection.CollectionUtil.listOf;
 import static net.eleritec.utils.lifecycle.SingleExec.runOnce;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+public interface LifecycleComponent {
 
-public abstract class LifecycleComponent {
-
-	private AtomicBoolean isOpen = new AtomicBoolean();
+	void open();
 	
-	protected abstract void open();
-	
-	public <T extends LifecycleComponent> T startIf(boolean criteria) {
+	@SuppressWarnings("unchecked")
+	default <T extends LifecycleComponent> T startIf(boolean criteria) {
 		if(criteria) {
 			start();
 		}
-		return self();
-	}
-	
-	public <T extends LifecycleComponent> T start() {
-		isOpen.set(runOnce(()->open()));
-		return self();
-	}
-	
-	public boolean isOpen() {
-		return isOpen.get();
+		return (T) this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends LifecycleComponent> T self() {
+	default <T extends LifecycleComponent> T start() {
+		LifecycleTracker.getOpenStatus(this).set(runOnce(()->open()));
 		return (T) this;
+	}
+	
+	default boolean isOpen() {
+		return LifecycleTracker.getOpenStatus(this).get();
 	}
 	
 	@SafeVarargs
