@@ -3,11 +3,14 @@ package net.eleritec.utils.collection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import net.eleritec.utils.function.FunctionUtil;
+import net.eleritec.utils.object.ClassUtil;
 
 public class MapUtil {
 
@@ -66,6 +69,44 @@ public class MapUtil {
 			}
 		}
 		return value;
+	}
+	
+	@SafeVarargs
+	public static <K, V> Set<V> values(Map<K, V> map, K... keys) {
+		return values(map, Arrays.asList(keys));
+	}
+
+	public static <K, V> Set<V> values(Map<K, V> map, Collection<K> keys) {
+		Set<V> values = new HashSet<V>();
+		for(K key: keys) {
+			V value = key==null? null: map.get(key);
+			if(value!=null) {
+				values.add(value);
+			}
+		}
+		return values;
+	}
+	
+	@SafeVarargs
+	public static <K, V> Map<K, V> getAll(Map<K, V> map, K... keys) {
+		return getAll(map, Arrays.asList(keys));
+	}
+
+	public static <K, V> Map<K, V> getAll(Map<K, V> map, Collection<K> keys) {
+		Map<K, V> subMap = newMap(map.getClass());
+		for(K key: keys) {
+			V value = key==null? null: map.get(key);
+			if(value!=null) {
+				subMap.put(key, value);
+			}
+		}
+		return subMap;
+	}
+	
+	private static <K, V> Map<K, V> newMap(@SuppressWarnings("rawtypes") Class<? extends Map> type) {
+		@SuppressWarnings("unchecked")
+		Map<K, V> newMap = ClassUtil.newInstance(type);
+		return newMap==null? newMap(HashMap.class): newMap;
 	}
 
 }

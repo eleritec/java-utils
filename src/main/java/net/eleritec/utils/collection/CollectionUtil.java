@@ -15,6 +15,34 @@ import net.eleritec.utils.object.ObjectUtil;
 
 public class CollectionUtil {
 
+	public static <T> T get(T[] items, int index) {
+		return get(items, index, null);
+	}
+	
+	public static <T> T get(T[] items, int index, T defaultValue) {
+		if(items==null || index < 0 || index >= items.length) {
+			return defaultValue;
+		}
+		return items[index];
+	}
+	
+	public static <T> T get(List<T> items, int index) {
+		return get(items, index, null);
+	}
+	
+	public static <T> T get(List<T> items, int index, T defaultValue) {
+		if(items==null || index < 0 || index >= items.size()) {
+			return defaultValue;
+		}
+		return items.get(index);
+	}
+	
+	public static <T> void set(List<T> items, T item, int index) {
+		if(items!=null && index >=0 && index < items.size()) {
+			items.set(index, item);
+		}
+	}
+	
 	public static <T> List<T> asList(Collection<T> collection) {
 		return asList(collection, ArrayList.class);
 	}
