@@ -2,6 +2,10 @@ package net.eleritec.utils.misc;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.List;
+
 import static net.eleritec.utils.misc.SpreadsheetColumnSequence.*;
 
 public class SpreadsheetColumnSequenceTest {
@@ -34,5 +38,15 @@ public class SpreadsheetColumnSequenceTest {
 		assertEquals("A", next("123"));
 		assertEquals("A", next("foo*&"));
 		assertEquals("A", next("!(&23"));
+	}
+	
+	@Test
+	public void testSequenceWithEmptyStart() {
+		assertList(getSequence(null, 3), "A", "B", "C");
+	}
+	
+	@SafeVarargs
+	private static <T> void assertList(List<T> actual, T...expected) {
+		assertEquals(Arrays.asList(expected), actual);
 	}
 }

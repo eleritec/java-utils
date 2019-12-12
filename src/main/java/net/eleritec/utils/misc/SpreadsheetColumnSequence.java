@@ -44,14 +44,11 @@ public class SpreadsheetColumnSequence {
 		step = Math.max(Math.abs(step), 1);
 		String base = column.substring(0, column.length()-1);
 		String nextChar = column.length()==1? column: column.substring(column.length()-1);
-		int index = LETTERS.indexOf(nextChar);
 		for(int i=0; i<step; i++) {
-			index++;
-			if(index >= LETTERS.length()) {
+			nextChar = nextChar(nextChar);
+			if(FIRST_LETTER.equals(nextChar)) {
 				base = rollover(base);
-				index = 0;
 			}
-			nextChar = valueOf(LETTERS.charAt(index));
 		}
 		
 		return base + nextChar;
