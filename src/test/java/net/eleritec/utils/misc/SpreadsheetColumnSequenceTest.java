@@ -43,6 +43,16 @@ public class SpreadsheetColumnSequenceTest {
 	@Test
 	public void testSequenceWithEmptyStart() {
 		assertList(getSequence(null, 3), "A", "B", "C");
+		assertList(getSequence("", 3), "A", "B", "C");
+		assertList(getSequence("    ", 3), "A", "B", "C");
+		assertList(getSequence("*&$", 3), "A", "B", "C");
+	}
+	
+	@Test
+	public void testSimpleSequence() {
+		assertList(getSequence("A", 3), "A", "B", "C");
+		assertList(getSequence("Y", 4), "Y", "Z", "AA", "AB");
+		assertList(getSequence("foo", 4), "FOO", "FOP", "FOQ", "FOR");
 	}
 	
 	@SafeVarargs

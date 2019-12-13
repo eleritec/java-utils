@@ -20,14 +20,16 @@ public class SpreadsheetColumnSequence {
 		count = Math.max(Math.abs(count), 1);
 
 		List<String> sequence = new ArrayList<String>();
+		if(column!=null) {
+			sequence.add(column);
+			count--;
+		}
+		
 		for(int i=0; i<count; i++) {
 			String previous = sequence.size()==0? column: sequence.get(sequence.size()-1);
 			sequence.add(next(previous, step));
 		}
-		
-		if(column!=null) {
-			sequence.add(0, column);
-		}
+	
 		return sequence;
 	}
 	
