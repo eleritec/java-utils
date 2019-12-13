@@ -1,12 +1,13 @@
 package net.eleritec.utils.misc;
 
-import org.junit.Test;
+import static net.eleritec.utils.misc.SpreadsheetColumnSequence.getSequence;
+import static net.eleritec.utils.misc.SpreadsheetColumnSequence.next;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static net.eleritec.utils.misc.SpreadsheetColumnSequence.*;
+import org.junit.Test;
 
 public class SpreadsheetColumnSequenceTest {
 
@@ -26,14 +27,14 @@ public class SpreadsheetColumnSequenceTest {
 	}
 	
 	@Test
-	public void testMultiLetter() {
+	public void testNextMultiLetter() {
 		assertEquals("FOP", next("foo"));
 		assertEquals("BAS", next("bar"));
 		assertEquals("BBA", next("baz"));
 	}
 	
 	@Test
-	public void testGarbageInput() {
+	public void testNextGarbage() {
 		assertEquals("A", next("a a"));
 		assertEquals("A", next("123"));
 		assertEquals("A", next("foo*&"));
@@ -41,7 +42,7 @@ public class SpreadsheetColumnSequenceTest {
 	}
 	
 	@Test
-	public void testSequenceWithEmptyStart() {
+	public void testSequenceWithEmptySeed() {
 		assertList(getSequence(null, 3), "A", "B", "C");
 		assertList(getSequence("", 3), "A", "B", "C");
 		assertList(getSequence("    ", 3), "A", "B", "C");
