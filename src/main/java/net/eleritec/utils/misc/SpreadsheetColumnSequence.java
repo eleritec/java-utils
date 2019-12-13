@@ -43,6 +43,13 @@ public class SpreadsheetColumnSequence {
 			return FIRST_LETTER;
 		}
 		
+		// on the surface, it would seem this whole thing would be simpler if we 
+		// simply converted to Base-26, did some math, then converted back to string.
+		// in practice, under our column scheme, we don't have a representation of 0
+		// since 'A' = 1.  the extra complexity to account for this is going to end up 
+		// equal to or greater than the string-based rotation scheme we already have, 
+		// and probably less readable.
+		
 		step = Math.max(Math.abs(step), 1);
 		String base = column.substring(0, column.length()-1);
 		String nextChar = column.length()==1? column: column.substring(column.length()-1);

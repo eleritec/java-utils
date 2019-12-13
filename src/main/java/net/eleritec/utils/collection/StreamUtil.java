@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.eleritec.utils.NumberUtil;
 import net.eleritec.utils.object.ObjectUtil;
 
 public class StreamUtil {
@@ -69,4 +70,10 @@ public class StreamUtil {
 	public static <T> Stream<T> notNull(Collection<T> items) {
 		return filter(items, ObjectUtil::notNull);
 	}
+	
+	public static <T> Stream<ListIndex<T>> indices(Collection<T> items) {
+		List<T> list = CollectionUtil.asList(items);
+		return map(i->new ListIndex<T>(i, list.get(i)), NumberUtil.range(list.size()));
+	}
+	
 }

@@ -1,9 +1,9 @@
 package net.eleritec.utils.collection;
 
 import static java.util.Arrays.asList;
+import static net.eleritec.utils.NumberUtil.range;
 import static net.eleritec.utils.collection.ListComprehension.expand;
 import static net.eleritec.utils.collection.ListComprehension.list;
-import static net.eleritec.utils.collection.ListComprehension.range;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
