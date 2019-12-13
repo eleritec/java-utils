@@ -1,8 +1,7 @@
 package net.eleritec.utils.misc;
 
 import static java.lang.String.format;
-import static net.eleritec.utils.collection.StreamUtil.indices;
-import static net.eleritec.utils.collection.StreamUtil.list;
+import static net.eleritec.utils.collection.ListIndex.map;
 import static net.eleritec.utils.misc.SpreadsheetColumnSequence.getSequence;
 import static net.eleritec.utils.misc.SpreadsheetColumnSequence.next;
 import static org.junit.Assert.assertEquals;
@@ -66,9 +65,9 @@ public class SpreadsheetColumnSequenceTest {
 	
 	@Test
 	public void testComplexFormulae001() {
-		List<String> formulae = list(indices(getSequence("J", 10, 2)).map(col->{
+		List<String> formulae = map(getSequence("J", 10, 2), col->{
 			return format("$%s3-sum(%s20:%s100)", col.evenOdd("F", "G"), col.value(), col.value());
-		}));
+		});
 
 		assertEquals(10, formulae.size());
 		assertEquals("$F3-sum(J20:J100)", formulae.get(0));
@@ -87,6 +86,5 @@ public class SpreadsheetColumnSequenceTest {
 	private static <T> void assertList(List<T> actual, T...expected) {
 		assertEquals(Arrays.asList(expected), actual);
 	}
-
 
 }
