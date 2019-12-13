@@ -1,14 +1,14 @@
 package net.eleritec.utils.misc;
 
-import static net.eleritec.utils.collection.StreamUtil.*;
+import static java.lang.String.format;
+import static net.eleritec.utils.collection.StreamUtil.indices;
+import static net.eleritec.utils.collection.StreamUtil.list;
 import static net.eleritec.utils.misc.SpreadsheetColumnSequence.getSequence;
 import static net.eleritec.utils.misc.SpreadsheetColumnSequence.next;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
-import static java.lang.String.*;
 
 import org.junit.Test;
 
