@@ -38,6 +38,14 @@ public class ThreadUtil {
 		}
 	}
 	
+	public static void notifyAll(Object obj) {
+		if(obj!=null) {
+			synchronized(obj) {
+				obj.notifyAll();
+			}
+		}
+	}
+	
 	public static ScheduledExecutorService newScheduledExecutorService(int cores, String threadName, boolean daemon) {
 		return Executors.newScheduledThreadPool(cores, ThreadUtil.newThreadFactory(threadName, daemon));
 	}

@@ -1,10 +1,15 @@
 package net.eleritec.utils.object;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import net.eleritec.utils.StringUtil;
 
 public class ClassUtil {
 
@@ -116,5 +121,71 @@ public class ClassUtil {
 			return boolean.class;
 		}
 		return null;
+	}
+	
+	public static List<Method> getInterfaceMethods(Class<?> iface) {
+		List<Method> methods = new ArrayList<Method>();
+		if (iface==null || !iface.isInterface()) {
+			return methods;
+		}
+
+		methods.addAll(Arrays.asList(iface.getMethods()));
+		for (Class<?> parent : iface.getInterfaces()) {
+			methods.addAll(getInterfaceMethods(parent));
+		}
+		return methods;
+	}
+	
+	public static Method findMethod(Class<?> clazz, String name, Class<?>... params) {
+		if (clazz == null || StringUtil.isEmpty(name)) {
+			return null;
+		}
+
+		name = name.trim();
+		Method method = getMethod(clazz, name, params);
+		while (method == null && clazz != null) {
+			clazz = clazz.getSuperclass();
+			method = getMethod(clazz, name, params);
+		}
+		return method;
+	}
+
+	public static Method getMethod(Class<?> clazz, String name, Class<?>... params) {
+		if(clazz==null || StringUtil.isEmpty(name)) {
+			return null;
+		}
+		try {
+			return clazz.getMethod(name.trim(), params);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public static boolean isMatch(Method approximate, Method target) {
+		if(approximate==target) {
+			return true;
+		}
+		
+		if(approximate==null || target==null) {
+			return false;
+		}
+		
+		if(!Objects.equals(approximate.getName(), target.getName())) {
+			return false;
+		}
+		
+		Class<?>[] aParams = approximate.getParameterTypes();
+		Class<?>[] tParams = target.getParameterTypes();
+		if(aParams.length!=tParams.length) {
+			return false;
+		}
+		
+		for(int i=0; i<aParams.length; i++) {
+			if(!tParams[i].isAssignableFrom(aParams[i])) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

@@ -85,6 +85,14 @@ public class CompareUtil {
 		return policy.isIncludeUpper()? comparison <=0: comparison<0;
 	}
 	
+	public static <T extends Comparable<T>> T max(T left, T right) {
+		return compare(left, right) >= 0? left: right;
+	}
+	
+	public static <T extends Comparable<T>> T min(T left, T right) {
+		return compare(left, right) <= 0? left: right;
+	}
+	
 	
 	public static <T extends Comparable<T>> int compare (T left, T right) {
 		if(left==right) {

@@ -108,5 +108,38 @@ public class MapUtil {
 		Map<K, V> newMap = ClassUtil.newInstance(type);
 		return newMap==null? newMap(HashMap.class): newMap;
 	}
+	
+	public static <K, V> Map<K, V> hashMap(Object... items) {
+		return keyValuePairs(HashMap.class, Arrays.asList(items));
+	}
+	
+	public static <K, V> Map<K, V> keyValuePairs(@SuppressWarnings("rawtypes") Class<? extends Map> mapType, Object... items) {
+		return keyValuePairs(mapType, Arrays.asList(items));
+	}
+	
+	public static <K, V> Map<K, V> keyValuePairs(Collection<?> items) {
+		return keyValuePairs(HashMap.class, items);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> keyValuePairs(@SuppressWarnings("rawtypes") Class<? extends Map> mapType, Collection<?> items) {
+		int count = 0;
+		K key = null;
+		V value = null;
+		Map<K, V> map = newMap(mapType);
+		for(Object item: items) {
+			if(count%2==0) {
+				key = (K)item;
+			}
+			else {
+				value = (V)item;
+				if(key!=null && value!=null) {
+					map.put(key, value);
+				}
+			}
+			count++;
+		}
+		return map;
+	}
 
 }

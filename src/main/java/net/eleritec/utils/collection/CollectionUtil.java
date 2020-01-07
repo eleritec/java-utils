@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.eleritec.utils.CompareUtil;
 import net.eleritec.utils.object.ClassUtil;
 import net.eleritec.utils.object.ObjectUtil;
 
@@ -122,5 +123,23 @@ public class CollectionUtil {
 	public static <T> T firstMatch(Collection<T> items, Predicate<T> filter, T defaultValue) {
 		T match = items==null? null: items.stream().filter(filter).findFirst().orElse(null);
 		return match==null? defaultValue: match;
+	}
+	
+	public static <T extends Comparable<T>> T maxValue(T[] array) {
+		return maxValue(Arrays.asList(array));
+	}
+
+	public static <T extends Comparable<T>> T maxValue(Collection<T> collection) {
+		T seed = collection.isEmpty()? null: collection.iterator().next();
+		return collection.stream().reduce(seed, (a,b)->CompareUtil.max(a, b));
+	}
+	
+	public static <T extends Comparable<T>> T minValue(T[] array) {
+		return minValue(Arrays.asList(array));
+	}
+
+	public static <T extends Comparable<T>> T minValue(Collection<T> collection) {
+		T seed = collection.isEmpty()? null: collection.iterator().next();
+		return collection.stream().reduce(seed, (a,b)->CompareUtil.min(a, b));
 	}
 }

@@ -1,6 +1,6 @@
 package net.eleritec.utils.collection;
 
-import static net.eleritec.utils.collection.StreamUtil.combine;
+import static net.eleritec.utils.collection.StreamUtil.all;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,13 +81,13 @@ public class ListComprehension {
 	@SafeVarargs
 	private static <T, R> Stream<R> stream(Function<T, R> tx, Collection<T> collection, Predicate<T>...filters) {
 		Stream<T> stream = collection==null? (Stream<T>) EMPTY.stream(): collection.stream();
-		stream = stream.filter(combine(filters));
+		stream = stream.filter(all(filters));
 		return tx==null? (Stream<R>) stream: stream.map(tx);
 	}
 	
 	@SafeVarargs
 	public static <T> int indexOf(List<T> list, Predicate<T>...filters) {
-		Predicate<T> matcher = combine(filters);
+		Predicate<T> matcher = all(filters);
 		for(int i=0; list!=null && i<list.size(); i++) {
 			if(matcher.test(list.get(i))) {
 				return i;
@@ -99,7 +99,7 @@ public class ListComprehension {
 	@SafeVarargs
 	public static <T> int lastIndexOf(List<T> list, Predicate<T>...filters) {
 		int lastIndex = -1;
-		Predicate<T> matcher = combine(filters);
+		Predicate<T> matcher = all(filters);
 		for(int i=0; list!=null && i<list.size(); i++) {
 			if(matcher.test(list.get(i))) {
 				lastIndex = i;
